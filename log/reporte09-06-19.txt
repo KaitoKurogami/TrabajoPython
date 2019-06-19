@@ -1,0 +1,4 @@
+decimo: No ha sido encontrada en Wiktionary, pero pattern la considera un sustantivo
+decimo: No ha sido encontrada en Wiktionary, pero pattern la considera un sustantivo
+décimo: En Wiktionary se considera: adjetivo, pero pattern se considera un sustantivo
+ostentar: En Wiktionary se considera: verbo, pero pattern se considera un sustantivo

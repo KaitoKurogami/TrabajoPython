@@ -1,0 +1,3 @@
+sisterna: No ha sido encontrada en Wiktionary, pero pattern la considera un sustantivo
+azotar: En Wiktionary se considera: verbo, pero pattern se considera un sustantivo
+sonrojada: En Wiktionary se considera: adjetivo, pero pattern se considera un sustantivo
