@@ -25,10 +25,15 @@ def InfoPalabraWiktionary(palabra):
 	adjetivo o verbo, y una definición
 	Si no encuentra nada, returna None,None
 	'''
-	
+	layout=[
+			[sg.Text('Al cerrarse esto comenzará a buscar la palabra\nNo debería tardar mas de 30 segundos')],
+			]
+	ventana_buscando=sg.Window('Buscando',no_titlebar=True, auto_close=True,auto_close_duration=5).Layout(layout)
+	ventana_buscando.Show()
 	fin=False
 	esp=False
 	article = Wiktionary(language="es").search(palabra) 
+	ventana_buscando.Close()
 	if article==None:
 		return None,None
 	else:
@@ -346,8 +351,12 @@ def Configurar(reporte_pantalla,dic_config):
 			tipografia2=values_config['tipografia cuerpo']
 			ventana_config.FindElement('ejemplo2').Update(font=tipografia2+fontsize)
 		if event_config=='Guardar':
-			configurado=True
-			break
+			if(not values_config['cant_adjetivos'].isdigit() or not values_config['cant_sustantivos'].isdigit()
+			or not values_config['cant_verbos'].isdigit()):
+				sg.Popup('Revise que las cantidades ingresadas para cada tipo de palabra\nSean numeros adecuados\n(Tenga cuidado con espacios que no se vean)')
+			else:
+				configurado=True
+				break
 		if 'oficinas'==values_config['elegir estilo']:
 			ventana_config.FindElement('oficina').Update(disabled=False)
 		if 'normal'==values_config['elegir estilo']:
@@ -391,62 +400,33 @@ def config_valida(dic_config):
 			palabras_por_tipo[tipo_a_usar][palabra]=dic_config['palabras'][palabra]['descripcion']
 		palabras_final={'sustantivos':{},'adjetivos':{},'verbos':{}}
 		#Diccionario final eligiendo las palabras a usar en el juego
-		cont_sust=0
-		cont_adj=0
-		cont_verb=0
+		contadores={'sustantivos':0,'adjetivos':0,'verbos':0}
 		max_long=0
 		total=0
-		for num in range(0,int(dic_config['cant_sustantivos'])):
-			try:
-				if(total<palabras_max):
-					Pelegida=random.choice(list(palabras_por_tipo['sustantivos'].keys()))
-					Delegida=palabras_por_tipo['sustantivos'].pop(Pelegida)
-					if dic_config['MayusOMinus']=='mayusculas':
-						Pelegida=Pelegida.upper()
-					palabras_final['sustantivos'][Pelegida]=Delegida
-					if len(Pelegida)>max_long:
-						max_long=len(Pelegida)
-					cont_sust=cont_sust+1
-					total=total+1
-			except IndexError:
-				break
-		for num in range(0,int(dic_config['cant_adjetivos'])):
-			try:
-				if(total<palabras_max):
-					Pelegida=random.choice(list(palabras_por_tipo['adjetivos'].keys()))
-					Delegida=palabras_por_tipo['adjetivos'].pop(Pelegida)
-					if dic_config['MayusOMinus']=='mayusculas':
-						Pelegida=Pelegida.upper()
-					palabras_final['adjetivos'][Pelegida]=Delegida
-					if len(Pelegida)>max_long:
-						max_long=len(Pelegida)
-					cont_adj=cont_adj+1
-					total=total+1
-			except IndexError:
-				break
-		for num in range(0,int(dic_config['cant_verbos'])):
-			try:
-				if(total<palabras_max):
-					Pelegida=random.choice(list(palabras_por_tipo['verbos'].keys()))
-					Delegida=palabras_por_tipo['verbos'].pop(Pelegida)
-					if dic_config['MayusOMinus']=='mayusculas':
-						Pelegida=Pelegida.upper()
-					palabras_final['verbos'][Pelegida]=Delegida
-					if len(Pelegida)>max_long:
-						max_long=len(Pelegida)
-					cont_verb=cont_verb+1
-					total=total+1
-			except IndexError:
-				break
+		for tipo_palabra in contadores.keys():
+			for num in range(0,int(dic_config['cant_'+tipo_palabra])):
+				try:
+					if(total<palabras_max):
+						Pelegida=random.choice(list(palabras_por_tipo[tipo_palabra].keys()))
+						Delegida=palabras_por_tipo[tipo_palabra].pop(Pelegida)
+						if dic_config['MayusOMinus']=='mayusculas':
+							Pelegida=Pelegida.upper()
+						palabras_final[tipo_palabra][Pelegida]=Delegida
+						if len(Pelegida)>max_long:
+							max_long=len(Pelegida)
+						contadores[tipo_palabra]=contadores[tipo_palabra]+1
+						total=total+1
+				except IndexError:
+					break
 		#reviso si hay al menos una palabra
 		if total==0:
 			return False,{}
 		else:
-			sustantivos={'cantidad':cont_sust,'color':dic_config['colores']['Sustantivos'],
+			sustantivos={'cantidad':contadores['sustantivos'],'color':dic_config['colores']['Sustantivos'],
 			'palabras':palabras_final['sustantivos']}
-			adjetivos={'cantidad':cont_adj,'color':dic_config['colores']['Adjetivos'],
+			adjetivos={'cantidad':contadores['adjetivos'],'color':dic_config['colores']['Adjetivos'],
 			'palabras':palabras_final['adjetivos']}
-			verbos={'cantidad':cont_verb,'color':dic_config['colores']['Verbos'],
+			verbos={'cantidad':contadores['verbos'],'color':dic_config['colores']['Verbos'],
 			'palabras':palabras_final['verbos']}
 		if dic_config['elegir estilo']=='normal':
 			estilo=None
@@ -669,6 +649,7 @@ def juego(config_juego):
 	layout_solucion.extend(columna_grilla_resuelta_layout)
 	layout_solucion.append([sg.Text('',background_color=config_juego['estilo'])])
 	layout_solucion.append([sg.Button('Salir',size=(20,2))])
+	
 				
 	columna_elegir_tipo=[
 						[sg.Text('Elegir color',size=(10,2),background_color=config_juego['estilo'])],
@@ -696,8 +677,11 @@ def juego(config_juego):
 			sg.Text('',background_color=config_juego['estilo']),
 			sg.Column(columna_informacion,background_color=config_juego['estilo'])],
 			[sg.Text('',background_color=config_juego['estilo'])],
-			[sg.Multiline(texto_ayuda,size=(80,5),disabled=True,visible=(config_juego['ayuda']!='sin'))],
-			[sg.Button('Enviar resultado',size=(35,2),key='Enviar_resultado'),sg.Button('Salir',size=(35,2),key='Salir')]
+			[sg.Button('Enviar resultado',size=(20,2),key='Enviar_resultado'),sg.Button('Salir',size=(20,2),key='Salir'),
+			sg.Button('Mostrar Ayuda',size=(20,2),key='mostrar_ayuda',disabled=(config_juego['ayuda']=='sin')),
+			sg.Button('Ocultar Ayuda',size=(20,2),key='ocultar_ayuda',visible=False)],
+			[sg.Text('',background_color=config_juego['estilo'])],
+			[sg.Multiline(texto_ayuda,size=(80,5),visible=False,key='lista_ayuda')]
 			]
 				
 	ventana_juego=sg.Window('Sopa de letras',element_padding=(0,0),background_color=config_juego['estilo'],margins=(10,30)).Layout(layout_juego)
@@ -708,6 +692,18 @@ def juego(config_juego):
 		if event_juego=='Salir':
 			if sg.PopupYesNo('Seguro que desea salir?')=='Yes':
 				break
+		elif event_juego=='mostrar_ayuda':
+			ventana_juego.Size=(ventana_juego.Size[0],ventana_juego.Size[1]+83)
+			ventana_juego.FindElement('lista_ayuda').Update(visible=True)
+			ventana_juego.FindElement('mostrar_ayuda').Update(visible=False)
+			ventana_juego.FindElement('ocultar_ayuda').Update(visible=True)
+			ventana_juego.Refresh()
+		elif event_juego=='ocultar_ayuda':
+			ventana_juego.Size=(ventana_juego.Size[0],ventana_juego.Size[1]-83)
+			ventana_juego.FindElement('lista_ayuda').Update(visible=False)
+			ventana_juego.FindElement('mostrar_ayuda').Update(visible=True)
+			ventana_juego.FindElement('ocultar_ayuda').Update(visible=False)
+			ventana_juego.Refresh()
 		elif event_juego=='Elegir_sust':
 			color_actual=config_juego['sustantivos']['color']
 			ventana_juego.FindElement('Elegir_sust').Update(disabled=True)
@@ -727,7 +723,7 @@ def juego(config_juego):
 			if grilla_juego==grilla_resuelta:
 				sg.Popup('Felicidades, respuesta correcta!')
 			else:
-				if sg.PopupYesNo('Respuesta Incorrecta\n¿Desea ver la solución?')=='Yes':
+				if sg.PopupYesNo('Respuesta Incorrecta\n¿Desea ver la solución?\nSe considerará como perdido')=='Yes':
 					ventana_solucion=sg.Window('Solución',background_color=config_juego['estilo'],element_padding=(0,0),margins=(10,30)).Layout(layout_solucion)
 					event_solucion,values_solucion=ventana_solucion.Read()
 					ventana_solucion.Close()
