@@ -47,8 +47,8 @@ def Configurar(reporte_pantalla,dic_config):
 	lista_oficinas=['Elegir']
 	lista_oficinas.extend(list(dic_oficinas.keys()))
 	fontsize='12'
-	tipografia='Courier '
-	tipografia2='Courier '
+	tipografia=config_estandar["tipografia titulo"]
+	tipografia2=config_estandar["tipografia cuerpo"]
 	colores={'Sustantivos':config_estandar['colores']["Sustantivos"],'Adjetivos':config_estandar['colores']["Adjetivos"]
 	,'Verbos':config_estandar['colores']["Verbos"]}
 	columna=[
@@ -71,7 +71,7 @@ def Configurar(reporte_pantalla,dic_config):
 		sg.Text('Texto de Ejemplo',font=tipografia+fontsize,size=(20,1),key='ejemplo')],
 		[sg.Text('Tipografia texto',size=(11,2)),sg.InputCombo(['Courier ','Helvetica ','Times '],
 		change_submits=True,key='tipografia cuerpo',size=(10,1),default_value=config_estandar['tipografia cuerpo']),
-		sg.Text('Texto de Ejemplo',font=tipografia+fontsize,size=(20,1),key='ejemplo2')],
+		sg.Text('Texto de Ejemplo',font=tipografia2+fontsize,size=(20,1),key='ejemplo2')],
 		[sg.Text('Estilo',size=(11,1)),sg.InputCombo(['normal','oficinas']
 		,disabled=len(lista_oficinas)==1,change_submits=True,key='elegir estilo',size=(10,1)),
 		sg.InputCombo(lista_oficinas,disabled=True,key='oficina',size=(10,1))],
