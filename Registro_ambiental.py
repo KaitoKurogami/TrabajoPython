@@ -9,13 +9,13 @@ import Adafruit_DHT
 class Temperatura:
 	def __init__(self,pin=17,sensor=Adafruit_DHT.DHT11):
 		self._sensor=sensor
-		self._data:pin=pin
+		self._data_pin=pin
 	
 	def datos_sensor(self):
-		humedad,temperatura=Adafruit.DHD.read_retry(self._sensor,self._data_pin)
+		humedad,temperatura=Adafruit_DHT.read_retry(self._sensor,self._data_pin)
 		return{'temperatura':temperatura,'humedad':humedad}
 		
-if __name__="__main__":
+if __name__=="__main__":
 	temp=Temperatura()
 	oficina=input('ingrese oficina en la que se registrará la temperatura')
 	if not os.path.exists(os.path.join(os.getcwd(),'oficinas')):
@@ -31,10 +31,11 @@ if __name__="__main__":
 		oficinas={}
 	if oficina not in oficinas.keys():
 		oficinas[oficina]=[]
-	for num in range(10)
+	for num in range(10):
 		datos=temp.datos_sensor()
 		oficinas[oficina].append({'temp':datos['temperatura'],'humedad':datos['humedad'],
 		'fecha':datetime.fromtimestamp(time.time()).strftime('%a %d %b, %y')})
-		time.sleep(60)
+		print(datos)
+		time.sleep(5)
 	json.dump(oficinas,arch)	
 	arch.close()
