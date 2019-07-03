@@ -17,13 +17,6 @@ def Configurar(reporte_pantalla,dic_config):
 	la tipografia de los titulos y cuerpos del reporte a mostrar en pantalla
 	y si el color del juego dependerá de las oficinas o será el neutro
 	'''
-	if dic_config=={} or dic_config==None:
-		config_estandar={"ayuda": "sin", "orientacion": "horizontal", "cant_sustantivos": "3",
-		 "cant_adjetivos": "3", "cant_verbos": "3", "MayusOMinus": "mayusculas",
-		  "tipografia titulo": "Times ", "tipografia cuerpo": "Times ", "elegir estilo": "Sin",
-		   "oficina": "Elegir","colores": {"Sustantivos": "red", "Adjetivos": "green", "Verbos": "yellow"}}
-	else:
-		config_estandar=dic_config
 	if not os.path.exists(os.path.join(ruta_app,'palabras anteriores')):
 		os.mkdir(os.path.join(ruta_app,'palabras anteriores'))
 	try:
@@ -35,6 +28,15 @@ def Configurar(reporte_pantalla,dic_config):
 	except json.decoder.JSONDecodeError:
 		dic_palabras={}
 	archpalabras.close()
+	if dic_config=={} or dic_config==None:
+		config_estandar={"ayuda": "sin", "orientacion": "horizontal", "cant_sustantivos": "3",
+		 "cant_adjetivos": "3", "cant_verbos": "3", "MayusOMinus": "mayusculas",
+		  "tipografia titulo": "Times ", "tipografia cuerpo": "Times ", "elegir estilo": "Sin",
+		   "oficina": "Elegir","colores": {"Sustantivos": "red", "Adjetivos": "green", "Verbos": "yellow"}}
+	else:
+		config_estandar=dic_config
+		if dic_palabras=={}:
+			dic_palabras=config_estandar['palabras']
 	if not os.path.exists(os.path.join(ruta_app,'oficinas')):
 		dic_oficinas={}
 	else:
