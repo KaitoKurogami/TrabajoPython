@@ -60,6 +60,8 @@ if __name__ == '__main__':
 					json.dump(dic_config,archconfig)	
 					archconfig.close()
 					ventana_menu.FindElement('Jugar').Update(disabled=False)
+				else:
+					sg.Popup('La configuracion establecida no es valida.\nSe usará una anterior en caso de estar disponible')
 			elif event_menu[0]=='Reporte':
 				rj.reporte(reporte_pantalla,config['tipografia titulo'],config['tipografia cuerpo'])
 			elif event_menu[0]=='Jugar':
