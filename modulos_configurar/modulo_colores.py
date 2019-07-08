@@ -9,22 +9,23 @@ def elegir_colores(colores):
 	'Rosa fuerte':'#FF69B4','Salmón':'salmon','Violeta':'#EE82EE','oliva':'#808000','Aguamarina':'#7FFFD4',
 	'Turquesa':'#40E0D0','Chocolate':'#D2691E','coral':'#FF7F50'}
 	lista_colores=list(dic_colores.keys())
-	BCS='red'
-	BCA='green'
-	BCV='yellow'
+	dic_colores_alt=dict(zip(dic_colores.values(),dic_colores.keys()))
+	BCS=colores['Sustantivos']
+	BCA=colores['Adjetivos']
+	BCV=colores['Verbos']
 	columna1=[
 		[sg.Text('Sustantivos')],
-		[sg.InputCombo(lista_colores,change_submits=True,default_value='Rojo',size=(13,1),key='color_sust')],
+		[sg.InputCombo(lista_colores,change_submits=True,default_value=dic_colores_alt[colores['Sustantivos']],size=(13,1),key='color_sust')],
 		[sg.Button('',size=(13,2),disabled=True,button_color=('black',BCS),key='BS')],
 		]
 	columna2=[
 		[sg.Text('Adjetivos')],
-		[sg.InputCombo(lista_colores,change_submits=True,default_value='Verde',size=(13,1),key='color_adj')],
+		[sg.InputCombo(lista_colores,change_submits=True,default_value=dic_colores_alt[colores['Adjetivos']],size=(13,1),key='color_adj')],
 		[sg.Button('',size=(13,2),disabled=True,button_color=('black',BCA),key='BA')],
 		]
 	columna3=[
 		[sg.Text('Verbos')],
-		[sg.InputCombo(lista_colores,change_submits=True,default_value='Amarillo',size=(13,1),key='color_verbo')],
+		[sg.InputCombo(lista_colores,change_submits=True,default_value=dic_colores_alt[colores['Verbos']],size=(13,1),key='color_verbo')],
 		[sg.Button('',size=(13,2),disabled=True,button_color=('black',BCV),key='BV')],
 		]
 	layout_colores=[
