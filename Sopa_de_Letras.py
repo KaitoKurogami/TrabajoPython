@@ -46,22 +46,23 @@ if __name__ == '__main__':
 				break
 			elif event_menu[0]=='Configuración':
 				config=cj.Configurar(reporte_pantalla,dic_config)
-				valido,config_intermedia=cv.config_valida(config)
 				if reporte_pantalla['No encontrado']!='' or reporte_pantalla['No coinciden']!='':
 					ventana_menu.FindElement('Reporte').Update(disabled=False)
 					if config==None:
 						config={'tipografia titulo':'Times ','tipografia cuerpo':'Times '}
-				if valido:
-					config_juego=config_intermedia
-					dic_config=config
-					if not os.path.exists(os.path.join(ruta_app,'configuracion anterior')):
-						os.mkdir(os.path.join(ruta_app,'configuracion anterior'))
-					archconfig=open(os.path.join(ruta_app,'configuracion anterior','config.json'),'w+')
-					json.dump(dic_config,archconfig)	
-					archconfig.close()
-					ventana_menu.FindElement('Jugar').Update(disabled=False)
-				else:
-					sg.Popup('La configuracion establecida no es valida.\nSe usará una anterior en caso de estar disponible')
+				if config!=None:
+					valido,config_intermedia=cv.config_valida(config)
+					if valido:
+						config_juego=config_intermedia
+						dic_config=config
+						if not os.path.exists(os.path.join(ruta_app,'configuracion anterior')):
+							os.mkdir(os.path.join(ruta_app,'configuracion anterior'))
+						archconfig=open(os.path.join(ruta_app,'configuracion anterior','config.json'),'w+')
+						json.dump(dic_config,archconfig)	
+						archconfig.close()
+						ventana_menu.FindElement('Jugar').Update(disabled=False)
+					else:
+						sg.Popup('La configuracion establecida no es valida.\nSe usará una anterior en caso de estar disponible')
 			elif event_menu[0]=='Reporte':
 				rj.reporte(reporte_pantalla,config['tipografia titulo'],config['tipografia cuerpo'])
 			elif event_menu[0]=='Jugar':
