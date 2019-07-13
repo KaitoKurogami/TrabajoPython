@@ -1,7 +1,6 @@
 Integrante del grupo: Gardella Andres
 
 
-
 Los programas Muestra_datos y Registro_ambiental son a ser usados en la raspberry
 
 Registro_ambiental permite registrar la temperatura y humedad de una oficina ingresada mediante teclado, realiza un registro cada minuto, siendo un total de 10 registros, los cuales almacenará en un archivo de texto
@@ -10,7 +9,7 @@ Muestra_datos al detectar un sonido hace un registro de la temperatura y humedad
 
 ambos archivos deben estár en la misma carpeta, ya que muestra_datos usa la clase temperatura definida en registro_ambiental, modularizacion pendiente
 
-El programa Sopa_de_letras es el juego en si, al abrirlo presenta un menú con botones que llevan a usar los modulos presentes en la carpeta "modulos_sopa".
+El programa Sopa_de_letras es el juego en si, requiere de PySimpleGUI y Pattern, al abrirlo presenta un menú con botones que llevan a usar los modulos presentes en la carpeta "modulos_sopa".
 En caso de encontrar una configuracion valida en la carpeta "configuracion anterior" se podrá jugar directamente con aquella
 Caso contrario, el juego en si se encontrará deshabilitado hasta proveer una configuracion valida
 El boton "reporte" solo se habilita si ocurre uno de los casos planteados por la catedra ante el ingreso de una nueva palabra
