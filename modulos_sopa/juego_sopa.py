@@ -22,7 +22,6 @@ def juego(config_juego):
 	#a medida que se procesa cada palabra se designa sus coordenadas, se le asigna el color que le corresponde
 	#y se suma su contenido necesario al texto de ayuda a ser mostrado
 	lista_tipos=['sustantivos','adjetivos','verbos']
-	cant_elim=0
 	for tipo in lista_tipos:
 		for palabra in config_juego[tipo]['palabras']:
 			if config_juego['orientacion']=='vertical':
@@ -38,7 +37,6 @@ def juego(config_juego):
 				texto_ayuda=texto_ayuda+palabra+': '+config_juego[tipo]['palabras'][palabra]
 				
 			palabras[palabra]={'inicio':posicion,'color':config_juego[tipo]['color']}
-			cant_elim=cant_elim+1
 	if config_juego['letras']=='mayusculas':
 		letras_todas=string.ascii_uppercase
 	else:
