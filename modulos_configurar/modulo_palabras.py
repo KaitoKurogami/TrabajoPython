@@ -33,16 +33,17 @@ def Ingresar_palabras(datos,reporte_pantalla):
 			ventana_ingreso.Hide()
 			palabra=values_ingre['elem_agregar'].lower()
 			llamar_funcion=True
-			if palabra in lista_eliminar:
-				llamar_funcion=sg.PopupYesNo('La palabra ya fue ingresada anteriormente\n¿Desea eliminarla y agregarla nuevamente?')=='yes'
-			if llamar_funcion:
-				datos_palabra=pd.obtener_datos(palabra,reporte_pantalla,hoy)
-				if datos_palabra!=None:
-					datos[palabra]=datos_palabra
-					lista_eliminar.append(palabra)
-					lista_eliminar.sort()
-					ventana_ingreso.FindElement('lista_eliminar').Update(values=lista_eliminar)
-					ventana_ingreso.FindElement('Eliminar').Update(disabled=False)
+			if len(palabra)>=2:
+				if palabra in lista_eliminar:
+					llamar_funcion=sg.PopupYesNo('La palabra ya fue ingresada anteriormente\n¿Desea eliminarla y agregarla nuevamente?')=='yes'
+				if llamar_funcion:
+					datos_palabra=pd.obtener_datos(palabra,reporte_pantalla,hoy)
+					if datos_palabra!=None:
+						datos[palabra]=datos_palabra
+						lista_eliminar.append(palabra)
+						lista_eliminar.sort()
+						ventana_ingreso.FindElement('lista_eliminar').Update(values=lista_eliminar)
+						ventana_ingreso.FindElement('Eliminar').Update(disabled=False)
 			ventana_ingreso.UnHide()
 		elif event_ingre=='Eliminar':
 			if values_ingre['lista_eliminar']!='-Eliminar-':
